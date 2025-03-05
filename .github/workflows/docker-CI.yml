@@ -27,7 +27,6 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/hello-world:latest3
-
+        tags: ${{ secrets.DOCKER_USERNAME }}/hello-world:$(date +%s)
 
            

@@ -1,0 +1,36 @@
+name : Build & Deploy Docker Image
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+       - name: checkout code
+         uses: actions/checkout@v2
+
+       - name: Set up Docker Buildx
+         uses: docker/setup-buildx-acton@v1
+
+       - name: Log in to Docker Hub
+         uses: docker/login-actions@v2
+         with:
+            username: ${{ secret.DOCKER_USERNAME }}
+            password: ${{ secret.DOCKER_PASSWORD }}
+
+       - name: Build Docker Image
+         run: docker build -t ${{ secret.DOCKER_USERNAME }}/hello-world:latest .
+
+       - name: Push Docker Image to Docker Hub
+         run: docker push  ${{ secret.DOCKER_USERNAME }}/hello-world:latest
+
+
+
+
+
+
+
+           

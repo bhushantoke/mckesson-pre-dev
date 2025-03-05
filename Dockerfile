@@ -1,8 +1,8 @@
 FROM node:alpine
 RUN apk update
 WORKDIR /usr/src/app
-
-COPY package.json ./
+RUN chown -R node:node /usr/src/app
+COPY package*.json ./
 
 RUN npm install
 COPY . .

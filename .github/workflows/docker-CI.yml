@@ -21,17 +21,23 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        
-GIT_HASH=$(git rev-parse --short HEAD)
-DATE_TAG=$(date +"%Y-%m-%d-%H%M")
-TAG="${GIT_HASH}-${DATE_TAG}"
+
+    - name: Get Git commit hash and current date
+      id: vars
+      run: |
+         GIT_HASH=$(git rev-parse --short HEAD)
+         DATE_TAG=$(date +"%Y-%m-%d-%H%M")
+         echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
+         echo "DATE_TAG=$DATE_TAG" >> $GITHUB_ENV
+         echo "TAG=${GIT_HASH}-${DATE_TAG}" >> $GITHUB_ENV
+
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v3
       with:
         context: .
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/hello-world:$TAG
+        tags: ${{ secrets.DOCKER_USERNAME }}/hello-world:$GITHUB_ENV
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -48,9 +54,9 @@ TAG="${GIT_HASH}-${DATE_TAG}"
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Pull Docker image
-      run: docker pull ${{ secrets.DOCKER_USERNAME }}/hello-world:1$TAG
+      run: docker pull ${{ secrets.DOCKER_USERNAME }}/hello-world:$GITHUB_ENV
     - name: Stop & Remove Existing Containers
-      run: docker run -d -p 80:3000 --name hello-world ${{ secrets.DOCKER_USERNAME }}/hello-world:$TAG
+      run: docker run -d -p 80:3000 --name hello-world ${{ secrets.DOCKER_USERNAME }}/hello-world:$GITHUB_ENV
     - name: Verify Docker Container is Running
       run: docker ps -a   
 

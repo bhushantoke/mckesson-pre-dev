@@ -53,6 +53,15 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
+    - name: Get Git commit hash and current date
+      id: vars
+      run: |
+         GIT_HASH=$(git rev-parse --short HEAD)
+         DATE_TAG=$(date +"%Y-%m-%d-%H%M")
+         echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
+         echo "DATE_TAG=$DATE_TAG" >> $GITHUB_ENV
+         echo "TAG=${GIT_HASH}-${DATE_TAG}" >> $GITHUB_ENV
+   
     - name: Pull Docker image
       run: docker pull ${{ secrets.DOCKER_USERNAME }}/hello-world:${{ env.TAG }}
     - name: Stop & Remove Existing Containers

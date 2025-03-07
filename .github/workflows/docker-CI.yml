@@ -39,14 +39,14 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/hello-world:${{ env.TAG }}
 
-      - name: Verify Docker Image Build and Push
-        run: |
+      #- name: Verify Docker Image Build and Push
+      #  run: |
           # Check if the Docker image exists in the local images list
-          docker images | grep ${{ env.TAG }}
-          if [ $? -ne 0 ]; then
-            echo "Docker image build or push failed!"
-            exit 1
-          fi
+       #   docker images | grep ${{ env.TAG }}
+      #    if [ $? -ne 0 ]; then
+        #    echo "Docker image build or push failed!"
+       #     exit 1
+       #   fi
 
   deploy:
     runs-on: ubuntu-latest

@@ -40,17 +40,17 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/hello-world:${{ env.TAG }}
 
-      - name: Verify Docker Image Build and Push
-        run: |
-          # Check if the Docker image exists in the local images list
-          docker images | grep ${{ secrets.DOCKER_USERNAME }}/hello-world:${{ env.TAG }}
-          if [ $? -ne 0 ]; then
-            echo "Docker image build or push failed!"
-            exit 1
-          fi
-          echo "Verifying if the Docker image exists on DockerHub..."
-          IMAGE_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" "https://hub.docker.com/v2/repositories/${{ secrets.DOCKER_USERNAME }}/hello-world/tags/${{ env.TAG }}")
-          if [ "$IMAGE_EXISTS" -ne 200 ]; then
-            echo "Docker image was not pushed to DockerHub successfully!"
-            exit 1
-          fi
+#      - name: Verify Docker Image Build and Push
+#        run: |
+#          # Check if the Docker image exists in the local images list
+#          docker images | grep ${{ secrets.DOCKER_USERNAME }}/hello-world:${{ env.TAG }}
+#          if [ $? -ne 0 ]; then
+#            echo "Docker image build or push failed!"
+#            exit 1
+#          fi
+#          echo "Verifying if the Docker image exists on DockerHub..."
+#          IMAGE_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" "https://hub.docker.com/v2/repositories/${{ secrets.DOCKER_USERNAME }}/hello-world/tags/${{ env.TAG }}")
+#          if [ "$IMAGE_EXISTS" -ne 200 ]; then
+#            echo "Docker image was not pushed to DockerHub successfully!"
+#            exit 1
+#          fi

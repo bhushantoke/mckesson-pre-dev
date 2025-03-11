@@ -2,11 +2,11 @@
 name: Build Docker Image
 
 on:
-  #push:
-  #  branches:
-  #    - main
-  schedule:
-    - cron: '20 14 * * *'
+  push:
+    branches:
+      - main
+  #schedule:
+  #  - cron: '20 14 * * *'
 
 jobs:
   build:

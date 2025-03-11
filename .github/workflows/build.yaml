@@ -6,7 +6,7 @@ on:
   #  branches:
   #    - main
   schedule:
-    - cron: '45 7 * * *' # convert time ITC to EST
+    - cron: '0 8 * * *' # convert time ITC to EST
 
 jobs:
   build:

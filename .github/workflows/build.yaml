@@ -6,7 +6,7 @@ on:
   #  branches:
   #    - main
   schedule:
-    - cron: '30 7 * * *' # convert time ITC to EST
+    - cron: '45 7 * * *' # convert time ITC to EST
 
 jobs:
   build:
@@ -25,23 +25,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Get Git commit hash and current date
-        id: vars
+      - name: Build and Push Docker Image
         run: |
-          GIT_HASH=$(git rev-parse --short HEAD)
-          DATE_TAG=$(date +"%Y-%m-%d-%H%M")
-          echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
-          echo "DATE_TAG=$DATE_TAG" >> $GITHUB_ENV
-          echo "TAG=${GIT_HASH}-${DATE_TAG}" >> $GITHUB_ENV
-
-      - name: Build and push Docker image
-        id: build_and_push
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/hello-world:${{ env.TAG }}
-          echo "IMAGE_TAG=${{ env.TAG }}" >> $GITHUB_ENV
+          TAG=$(date +%Y%m%d%H%M%S)  # Using timestamp as the tag for uniqueness
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/hello-world:$TAG .
+          docker push ${{ secrets.DOCKER_USERNAME }}/hello-world:$TAG
+          echo "IMAGE_TAG=$TAG" >> $GITHUB_ENV
 
 #      - name: Verify Docker Image Build and Push
 #        run: |

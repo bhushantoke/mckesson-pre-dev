@@ -1,8 +1,13 @@
 # .github/workflows/deploy.yml 
 name: Deploy Docker Image
 
+#on:
+  #workflow_dispatch:  # Manual trigger # Add the dynamic trigger like after CI
 on:
-  workflow_dispatch:  # Manual trigger
+  workflow_run:
+    workflows: ["Build Docker Image"]  # The name of your CI workflow
+    types:
+      - completed
 
 jobs:
   deploy:
@@ -11,6 +16,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Wait for 2 hours before deployment
+        run: |
+          echo "Waiting for 2 hours before deployment..."
+          sleep 7200  # Sleep for 2 hours (7200 seconds)
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -21,19 +31,25 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      #- name: Get the latest image tag
+      #  id: get_latest_image
+      #  run: |
+          # Get the latest tag from Docker Hub (based on the most recent push)
+      #    LATEST_TAG=$(curl -s "https://hub.docker.com/v2/repositories/${{ secrets.DOCKER_USERNAME }}/hello-world/tags/" | jq -r '.results[0].name')  # Get the most recent tag
+      #    echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+      #    echo "Latest Docker image tag: $LATEST_TAG"  # Just to verify it
+
       - name: Get the latest image tag
         id: get_latest_image
         run: |
-          # Get the latest tag from Docker Hub (based on the most recent push)
-          LATEST_TAG=$(curl -s "https://hub.docker.com/v2/repositories/${{ secrets.DOCKER_USERNAME }}/hello-world/tags/" | jq -r '.results[0].name')  # Get the most recent tag
-          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
-          echo "Latest Docker image tag: $LATEST_TAG"  # Just to verify it
+          # Use the tag from the CI job, you can either use the timestamp tag or pull the latest
+          echo "Using image tag ${{ env.IMAGE_TAG }}"
 
       - name: Pull the latest Docker image
         id: pull_image
         run: |
           echo "Pulling the latest image with tag $LATEST_TAG"
-          docker pull ${{ secrets.DOCKER_USERNAME }}/hello-world:${{ env.LATEST_TAG }}
+          docker pull ${{ secrets.DOCKER_USERNAME }}/hello-world:${{ env.IMAGE_TAG }}
  #         if [ $? -ne 0 ]; then
  #           echo "Docker image pull failed!"
  #           exit 1
@@ -47,10 +63,9 @@ jobs:
 
       - name: Run Docker Container
         run: |
-          docker run -d -p 80:3000 --name hello-world ${{ secrets.DOCKER_USERNAME }}/hello-world:${{ env.LATEST_TAG }}
+          docker run -d -p 80:3000 --name hello-world ${{ secrets.DOCKER_USERNAME }}/hello-world:${{ env.IMAGE_TAG }}
           docker ps -a | grep hello-world
  #         if [ $? -ne 0 ]; then
  #           echo "Docker container failed to start!"
  #           exit 1
  #         fi
-

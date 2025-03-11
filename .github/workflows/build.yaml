@@ -2,15 +2,15 @@
 name: Build Docker Image
 
 on:
-  push:
-    branches:
-      - main
-  #schedule:
-  #  - cron: '20 14 * * *'
+  #push:
+  #  branches:
+  #    - main
+  schedule:
+    - cron: '30 7 * * *' # convert time ITC to EST
 
 jobs:
   build:
-    runs-on: rhel-latest
+    runs-on: ubuntu-latest #need to confirm this with austin
 
     steps:
       - name: Checkout code
@@ -41,6 +41,7 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/hello-world:${{ env.TAG }}
+          echo "IMAGE_TAG=${{ env.TAG }}" >> $GITHUB_ENV
 
 #      - name: Verify Docker Image Build and Push
 #        run: |

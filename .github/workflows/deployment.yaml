@@ -8,6 +8,7 @@ on:
     workflows: ["Build Docker Image"]  # The name of your CI workflow
     types:
       - completed
+  workflow_dispatch:  # Manual trigger
 
 jobs:
   deploy:

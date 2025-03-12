@@ -7,6 +7,7 @@ on:
   #    - main
   schedule:
     - cron: '45 8 * * *' # convert time ITC to EST
+  workflow_dispatch:  # Manual trigger
 
 jobs:
   build:

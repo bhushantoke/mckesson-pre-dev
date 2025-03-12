@@ -18,9 +18,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Wait for 5 Minutes before deployment
-        run: |
-          echo "Waiting for 5 min. before deployment..."
+      #- name: Wait for 5 Minutes before deployment
+      #  run: |
+      #    echo "Waiting for 5 min. before deployment..."
           #sleep 300  # Sleep for 5 minutes
 
       - name: Set up Docker Buildx

@@ -2,11 +2,11 @@
 name: Build Docker Image
 
 on:
-  push:
-    branches:
-      - main
+  #push:
+  #  branches:
+  #    - main
   schedule:
-    - cron: '30 8 * * *' # convert time ITC to EST
+    - cron: '35 4 * * *' # convert time ITC to EST
 
 jobs:
   build:

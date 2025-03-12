@@ -44,13 +44,13 @@ jobs:
         id: get_latest_image
         run: |
           # Use the tag from the CI job, you can either use the timestamp tag or pull the latest
-          echo "Using image tag $GITHUB_ENV"
+          echo "Using image tag $IMAGE_TAG"
 
       - name: Pull the latest Docker image
         id: pull_image
         run: |
-          echo "Pulling the latest image with tag $GITHUB_ENV"
-          docker pull ${{ secrets.DOCKER_USERNAME }}/hello-world:$GITHUB_ENV
+          echo "Pulling the latest image with tag $IMAGE_TAG"
+          docker pull ${{ secrets.DOCKER_USERNAME }}/hello-world:$IMAGE_TAG
  #         if [ $? -ne 0 ]; then
  #           echo "Docker image pull failed!"
  #           exit 1
@@ -64,7 +64,7 @@ jobs:
 
       - name: Run Docker Container
         run: |
-          docker run -d -p 80:3000 --name hello-world ${{ secrets.DOCKER_USERNAME }}/hello-world:$GITHUB_ENV
+          docker run -d -p 80:3000 --name hello-world ${{ secrets.DOCKER_USERNAME }}/hello-world:$IMAGE_TAG
           docker ps -a | grep hello-world
  #         if [ $? -ne 0 ]; then
  #           echo "Docker container failed to start!"

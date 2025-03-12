@@ -32,6 +32,9 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/hello-world:$TAG .
           docker push ${{ secrets.DOCKER_USERNAME }}/hello-world:$TAG
           echo "IMAGE_TAG=$TAG" >> $GITHUB_ENV
+      outputs:
+        image_tag: ${{ steps.build_image.outputs.IMAGE_TAG }}
+
 
 #      - name: Verify Docker Image Build and Push
 #        run: |

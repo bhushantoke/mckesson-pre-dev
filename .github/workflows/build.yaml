@@ -6,7 +6,7 @@ on:
   #  branches:
   #    - main
   schedule:
-    - cron: '45 8 * * *' # convert time ITC to EST
+    - cron: '45 8 * * *' # convert time ITC to PST
   workflow_dispatch:  # Manual trigger
 
 jobs:

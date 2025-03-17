@@ -31,16 +31,16 @@ jobs:
           TAG=$(date +%Y%m%d%H%M%S)  # Using timestamp as the tag for uniqueness
           docker build -t ${{ secrets.DOCKER_USERNAME }}/hello-world:$TAG .
           docker push ${{ secrets.DOCKER_USERNAME }}/hello-world:$TAG
-          #echo "IMAGE_TAG=$TAG" >> $GITHUB_ENV
-          #echo "::set-output name=image_tag::$IMAGE_TAG" #Make the IMAGE_TAG available as an output
-    #outputs:
-      #image_tag: ${{ steps.build_image.outputs.image_tag }}
+          echo "IMAGE_TAG=$TAG" >> $GITHUB_ENV
+          echo "::set-output name=image_tag::$IMAGE_TAG" #Make the IMAGE_TAG available as an output
+    outputs:
+      image_tag: ${{ steps.build_image.outputs.image_tag }}
       
-      - name: Save the image tag as an artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: image-tag
-          path: image-tag.txt
+      #- name: Save the image tag as an artifact
+      #  uses: actions/upload-artifact@v2
+      #  with:
+      #     name: image-tag
+      #    path: image-tag.txt
 
 
 #      - name: Verify Docker Image Build and Push

@@ -2,12 +2,12 @@
 name: Deploy Docker Image
 
 on:
-  workflow_run:
-    workflows: ["Build Docker Image"]  # The name of your CI workflow
-    types:
-      - completed
-  schedule:
-    - cron: '45 8 * * *' # convert time ITC to PST
+  #workflow_run:
+  #  workflows: ["Build Docker Image"]  # The name of your CI workflow
+  #  types:
+  #    - completed
+  #schedule:
+  #  - cron: '45 8 * * *' # convert time ITC to PST
   workflow_dispatch:  # Manual trigger
 
 jobs:
